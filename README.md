@@ -17,9 +17,9 @@
     <br />
     <a href="https://rack.micro-stack.org">View Demo</a>
     &middot;
-    <a href="https://https://github.com/ai-micro-stack/micro-rack/issues">Report Bug</a>
+    <a href="https://github.com/ai-micro-stack/micro-rack/issues">Report Bug</a>
     &middot;
-    <a href="https://https://github.com/ai-micro-stack/micro-rack/projects">Request Feature</a>
+    <a href="https://github.com/ai-micro-stack/micro-rack/projects">Request Feature</a>
   </p>
 </div>
 
@@ -199,7 +199,7 @@ yarn global add pm2
 
 ```sh
 cd ~
-git clone https://https://github.com/ai-micro-stack/micro-rack.git
+git clone https://github.com/ai-micro-stack/micro-rack.git
 
 # grant execute permission to bendend modules
 sudo chmod +x -R ~/micro-rack/srv/modules
@@ -422,7 +422,7 @@ _For more examples, please refer to the [Documentation](https://www.micro-stack.
   - [ ] Chinese
   - [ ] Spanish
 
-See the [open issues](https://https://github.com/ai-micro-stack/micro-rack/issues) for a full list of proposed features (and known issues).
+See the [open issues](https://github.com/ai-micro-stack/micro-rack/issues) for a full list of proposed features (and known issues).
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
