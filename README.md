@@ -461,7 +461,7 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 
 Principal Maintainer - [@Micro-Stack](https://www.micro-stack.org) - <maintainer@micro-stack.org>
 
-Project Link: [https://gitea.micro-stack.org/maintainer](https://gitea.micro-stack.org/maintainer)
+Project Link: [https://github.com/ai-micro-stack](https://github.com/ai-micro-stack)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
