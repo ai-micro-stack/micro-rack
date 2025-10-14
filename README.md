@@ -12,7 +12,7 @@
   <p align="center">
     A PXE environment setup tool for bare metal server kickstart
     <br />
-    <a href="https://gitea.micro-stack.org/micro-rack"><strong>Explore the docs »</strong></a>
+    <a href="https://www.micro-stack.org/"><strong>Explore the docs »</strong></a>
     <br />
     <br />
     <a href="https://rack.micro-stack.org">View Demo</a>
