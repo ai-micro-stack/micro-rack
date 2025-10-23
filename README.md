@@ -410,17 +410,19 @@ _For more examples, please refer to the [Documentation](https://www.micro-stack.
 
 ## Roadmap
 
+- [x] Core PXE & Netboot Environment development
+- [x] Add authentication and team member management
 - [x] Add the OS iso file upload and removal feature
 - [x] Add auto-install configuration file upload and removal feature
 - [x] Add user plugin upload & download feature to support customized processing
-- [x] Add authentication and team member management
 - [x] Add the home page starting-up quick hints
-- [ ] Add multi-pxe support, includes GRUB & Syslinux
-- [ ] Add software package installation selector
+- [x] Add multi-pxe support, includes GRUB & Syslinux
+  - [x] iPXE
+  - [ ] GRUB2
+  - [ ] Syslinux
+- [x] Add software package installation selector
 - [ ] Write the user guide document
-- [ ] Multi-language Support
-  - [ ] Chinese
-  - [ ] Spanish
+- [ ] Containerized application deployment
 
 See the [open issues](https://github.com/ai-micro-stack/micro-rack/issues) for a full list of proposed features (and known issues).
 
