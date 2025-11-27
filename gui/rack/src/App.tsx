@@ -2,23 +2,25 @@ import type { NavLinkRenderProps } from "react-router";
 import { Routes, Route, NavLink } from "react-router";
 import { Container, Row, Col, Navbar, Nav, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import { Suspense, lazy } from "react";
 import { AuthProvider, useAuth } from "@/components/AuthService";
 import { storeRefreshToken } from "@/utils/refreshToken";
 import { PrivateRoute } from "@/components/PrivateRoute";
-import HomePage from "@/pages/HomePage";
-// import PxeConfig from "@/pages/PxeConfig";
-import RackPlanner from "@/pages/RackPlanner";
-import RackBuilder from "@/pages/RackBuilder";
-import RackService from "@/pages/RackService";
-import OsUpload from "@/pages/OsUpload";
-import BootImage from "@/pages/BootImage";
-import StaticClient from "@/pages/StaticClient";
-import RackPlugin from "@/pages/RackPlugin";
-import TeamMember from "@/pages/TeamMember";
-import AboutUs from "@/pages/AboutUs";
-import UserProfile from "@/pages/UserProfile";
-import UserLogin from "@/pages/UserLogin";
-import Register from "@/pages/UserRegister";
+
+const HomePage = lazy(() => import("@/pages/HomePage"));
+const RackPlanner = lazy(() => import("@/pages/RackPlanner"));
+const RackBuilder = lazy(() => import("@/pages/RackBuilder"));
+const RackService = lazy(() => import("@/pages/RackService"));
+const OsUpload = lazy(() => import("@/pages/OsUpload"));
+const BootImage = lazy(() => import("@/pages/BootImage"));
+const StaticClient = lazy(() => import("@/pages/StaticClient"));
+const RackPlugin = lazy(() => import("@/pages/RackPlugin"));
+const TeamMember = lazy(() => import("@/pages/TeamMember"));
+const AboutUs = lazy(() => import("@/pages/AboutUs"));
+const UserProfile = lazy(() => import("@/pages/UserProfile"));
+const UserLogin = lazy(() => import("@/pages/UserLogin"));
+const Register = lazy(() => import("@/pages/UserRegister"));
+
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 
@@ -32,16 +34,14 @@ const Navigation = () => {
   const navigate = useNavigate();
   return (
     <Navbar
-      // bg="dark"
       bg="primary"
       data-bs-theme="dark"
-      // sticky="top"
       className="nav"
     >
       <Container>
         <Navbar.Brand>
           <img
-            src="favicon.ico"
+            src="/favicon.ico"
             width="28"
             height="28"
             className="d-inline-block align-bottom me-2"
@@ -55,11 +55,6 @@ const Navigation = () => {
               Home Page
             </NavLink>
           </Container>
-          {/* <Container>
-            <NavLink to="/pxe-config" style={style}>
-              Pex Config
-            </NavLink>
-          </Container> */}
           <Container>
             <NavLink to="/rack-planner" style={style}>
               Rack Planner
@@ -112,7 +107,7 @@ const Navigation = () => {
           <Button
             style={{
               backgroundColor: "transparent",
-              backgroundImage: "url('./profile.png')",
+              backgroundImage: "url('/profile.png')",
               backgroundSize: "cover",
               width: "40px",
               height: "40px",
@@ -155,22 +150,12 @@ const App = () => {
   return (
     <div>
       <Row>
-        {/* <Col sm={2}>
-          <Sidebar></Sidebar>
-        </Col> */}
         <Col>
           <AuthProvider>
             <Navigation />
-            <Routes>
+            <Suspense fallback={<div>Loading...</div>}>
+              <Routes>
               <Route index element={<HomePage />} />
-              {/* <Route
-                path="pxe-config"
-                element={
-                  <PrivateRoute allowedRoles={[1, 9]}>
-                    <PxeConfig />
-                  </PrivateRoute>
-                }
-              /> */}
               <Route
                 path="rack-planner"
                 element={
@@ -247,7 +232,8 @@ const App = () => {
               <Route path="user-login" element={<UserLogin />} />
               <Route path="register" element={<Register />} />
               <Route path="*" element={<p>There's nothing here: 404!</p>} />
-            </Routes>
+              </Routes>
+            </Suspense>
           </AuthProvider>
         </Col>
       </Row>

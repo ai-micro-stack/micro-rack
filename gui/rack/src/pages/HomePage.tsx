@@ -14,9 +14,11 @@ function HomePage() {
   const navigate = useNavigate();
   const [authState, setAuthState] = useState("");
 
-  getAuthState().then(({ data }) => {
-    setAuthState(data.state);
-  });
+  useEffect(() => {
+    getAuthState().then(({ data }) => {
+      setAuthState(data.state);
+    });
+  }, []);
 
   useEffect(
     () => {
@@ -46,7 +48,7 @@ function HomePage() {
                 width="1600"
                 height="840"
                 preserveAspectRatio="none"
-                href="netboot.png"
+                href="/netboot.png"
                 id="pxeboot"
               />
             </g>
