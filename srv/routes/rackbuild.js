@@ -22,7 +22,7 @@ Subnet.hasMany(Pxe, { foreignKey: "subnet_id" });
 Pxe.belongsTo(Subnet, { foreignKey: "subnet_id" });
 
 const rackDir = "./modules/rack";
-const confDir = `${rackDir}/config`;
+const confDir = `${rackDir}/_config_`;
 const ConfFile = `${confDir}/pxe-server.conf`;
 const WorkConf = `${confDir}/pxe-server.json`;
 
@@ -76,7 +76,7 @@ router.post("/apply", verifyToken, grantAccess([1, 2]), async (req, res) => {
     try {
       const setupDir = `${rackDir}/pxe/${taskObj.pxe.type}/`;
       // fs.chmodSync(`${setupDir}`, "0755");
-      fs.cpSync(`${confDir}`, `${setupDir}/config`, {
+      fs.cpSync(`${confDir}`, `${setupDir}/_config_`, {
         force: true,
         recursive: true,
         preserveTimestamps: true,

@@ -52,29 +52,42 @@ export function AuthProvider({ children }: AuthProviderProps) {
   async function handleLogout() {
     setAccessToken(null);
     setCurrentUser(null);
+    localStorage.clear();
   }
 
   function fetchAccessToken() {
     const refreshToken = fetchRefreshToken();
     if (refreshToken) {
-      try {
-        axiosInstance.post("/authlogin/fetch", { refreshToken }).then((res) => {
-          if (res.status === 200 && res.data?.accessToken) {
-            const authData = { ...res.data };
-            storeRefreshToken(authData.refreshToken, null);
-            setAccessToken(authData.accessToken);
-            setCurrentUser(authData.user);
+      axiosInstance.post("/authlogin/fetch", { refreshToken }).then((res) => {
+        if (res.status === 200 && res.data?.accessToken) {
+          const authData = { ...res.data };
+          storeRefreshToken(authData.refreshToken, null);
+          setAccessToken(authData.accessToken);
+          setCurrentUser(authData.user);
+        } else {
+          storeRefreshToken("", false);
+          handleLogout();
+          if (res.data?.error === "No user is registered yet") {
+            navigate("/register");
           } else {
-            storeRefreshToken("", false);
-            handleLogout();
-            navigate("/user-login");
+            navigate("/user-login", { state: { from: location } });
           }
-        });
-      } catch {
+        }
+      }).catch(() => {
         handleLogout();
-      }
+        navigate("/user-login", { state: { from: location } });
+      });
     } else {
-      handleLogout();
+      // Check if users table exists
+      axiosInstance.get("/authlogin/mode").then((res) => {
+        if (res.data?.state === "config") {
+          navigate("/register");
+        } else {
+          navigate("/user-login", { state: { from: location } });
+        }
+      }).catch(() => {
+        navigate("/register"); // Assume first time if /mode fails
+      });
     }
   }
 
@@ -101,7 +114,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       const token = accessToken || fetchRefreshToken();
 
       if (!token) {
-        navigate("/user-login");
+        navigate("/user-login", { state: { from: location } });
       }
 
       config.headers.set("Authorization", `Bearer ${token}`);
@@ -117,22 +130,25 @@ export function AuthProvider({ children }: AuthProviderProps) {
     function (response: AxiosResponse) {
       if (
         location.pathname !== "/user-login" &&
+        location.pathname !== "/register" &&
         (response.status === 401 || response.status === 403)
       ) {
         handleLogout();
+        navigate("/user-login", { state: { from: location } });
       }
       if (
         location.pathname === "/fetch" &&
         (response.status === 401 || response.status === 403)
       ) {
         handleLogout();
-        // navigate("/user-login");
+        navigate("/user-login", { state: { from: location } });
       }
       return response;
     },
     function (error: AxiosError) {
       if (location.pathname.endsWith("/fetch")) {
         handleLogout();
+        navigate("/user-login", { state: { from: location } });
       }
       return Promise.reject(error);
     }

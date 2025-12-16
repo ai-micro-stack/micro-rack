@@ -4,7 +4,7 @@ const fs = require("fs");
 // const { step3Worker } = require("./step3_worker");
 
 async function ollama(confObj) {
-  console.log("Nothing need to install on Server Farm cluster...")
+  console.log("Nothing need to install on LVS cluster...")
   // await step1Ollma(confObj);
   // await step2Service(confObj);
   // await step3Worker(confObj);

@@ -1,7 +1,7 @@
 const fs = require("fs");
 
 const rackDir = "./modules/rack";
-const confDir = `${rackDir}/config`;
+const confDir = `${rackDir}/_config_`;
 const ConfFile = `${confDir}/pxe-server.conf`;
 
 function getConfValue(paramName) {

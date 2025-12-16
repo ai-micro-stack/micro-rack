@@ -244,6 +244,7 @@ function PluginManager({
                   <td>
                     {area.pluginList && (
                       <Button
+                        size="sm"
                         style={{ width: "40px" }}
                         onClick={() => toggleOpen(area.pluginType)}
                         aria-controls={`collapse-${area.pluginType}`}

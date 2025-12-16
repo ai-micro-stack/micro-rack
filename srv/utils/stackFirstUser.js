@@ -26,6 +26,7 @@ const stackFirstUser = async ({ username, password, email }) => {
       role_id: 1,
       active: 1,
       fullname: `${username}`,
+      createdDate: new Date(),
     };
     await User.sync({ force: false, alter: true });
     await User.create(user);

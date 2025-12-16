@@ -1,8 +1,8 @@
 require("module-alias/register");
 const { DataTypes, Sequelize } = require("sequelize");
-const { db } = require("@database/db");
+const db = require("@database/db").context;
 
-const User = db.context.define(
+const User = db.define(
   "User",
   {
     uuid: {
@@ -28,13 +28,12 @@ const User = db.context.define(
       type: DataTypes.TINYINT,
       allowNull: true,
     },
-    createdDate: {
-      type: DataTypes.DATE,
-      defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
-      allowNull: false,
-    },
     active: {
       type: DataTypes.BOOLEAN,
+      allowNull: false,
+    },
+    createdDate: {
+      type: DataTypes.DATE,
       allowNull: false,
     },
     fullname: {
@@ -43,7 +42,7 @@ const User = db.context.define(
     },
   },
   {
-    timestamps: false,
+    timestamps: true,
     tableName: "users",
     // indexes: [
     //   {

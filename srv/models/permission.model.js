@@ -1,8 +1,8 @@
 require("module-alias/register");
 const { DataTypes } = require("sequelize");
-const { db } = require("@database/db");
+const db = require("@database/db").context;
 
-const Permission = db.context.define(
+const Permission = db.define(
   "Permission",
   {
     id: {
@@ -22,7 +22,7 @@ const Permission = db.context.define(
     },
   },
   {
-    timestamps: false,
+    timestamps: true,
     tableName: "permissions",
     // indexes: [
     //   {

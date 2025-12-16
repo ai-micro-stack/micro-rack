@@ -7,7 +7,7 @@ const { serviceCheck } = require("@utils/rackSvcFinder");
 const { verifyToken, grantAccess } = require("@middleware/authMiddleware");
 
 const rackDir = "./modules/rack";
-const confDir = `${rackDir}/config`;
+const confDir = `${rackDir}/_config_`;
 const WorkConf = `${confDir}/pxe-server.json`;
 const moduleTypes = pluginModuleTypes.rackPlugin;
 

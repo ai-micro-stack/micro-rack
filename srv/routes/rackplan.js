@@ -23,7 +23,7 @@ Subnet.hasMany(Pxe, { foreignKey: "subnet_id" });
 Pxe.belongsTo(Subnet, { foreignKey: "subnet_id" });
 
 const rackDir = "./modules/rack";
-const confDir = `${rackDir}/config`;
+const confDir = `${rackDir}/_config_`;
 const ConfFile = `${confDir}/pxe-server.conf`;
 
 router.get("/modules", async (req, res) => {
@@ -50,7 +50,7 @@ router.get(
     const nicData = await StackInterface();
     const macList = nicData.map((n) => n.nic_mac);
     try {
-      await Interface.findAll({
+      const result = await Interface.findAll({
         where: { nic_mac: macList },
         include: [
           {
@@ -66,13 +66,12 @@ router.get(
             ],
           },
         ],
-      }).then((result) => {
-        return res.status(200).json({
-          Interfaces: result,
-        });
+      });
+      return res.status(200).json({
+        Interfaces: result,
       });
     } catch (err) {
-      return res.status(500).send(err);
+      return res.status(500).json({ error: "Internal server error", details: err.message });
     }
   }
 );
@@ -84,14 +83,14 @@ router.post("/save", verifyToken, grantAccess([1, 2]), async (req, res) => {
     // save the changes if made any
     const addedNets = await AddSubnets([curSubnet]);
     const addedPxe = { ...curPxe, subnet_id: addedNets[0].id };
-    await AddPxe(addedPxe);
+    const createdPxe = await AddPxe(addedPxe);
 
     // populate the config file
-    const confContent = PopulateRackConf(curInterface, curSubnet, curPxe);
+    const confContent = PopulateRackConf(curInterface, curSubnet, createdPxe);
     fs.writeFileSync(`${ConfFile}`, confContent.data);
 
     // populate the object file
-    const confObject = PopulateRackObject(curInterface, curSubnet, curPxe);
+    const confObject = PopulateRackObject(curInterface, curSubnet, createdPxe);
     if (confObject.code !== 0) {
       return res
         .status(500)
@@ -100,18 +99,18 @@ router.post("/save", verifyToken, grantAccess([1, 2]), async (req, res) => {
     const taskObj = confObject.data;
 
     // save json file for human readable
-    const pxeJson = `${confDir}/pxe-${curPxe.id.toString()}_${taskUser}.json`;
+    const pxeJson = `${confDir}/pxe-${createdPxe.id.toString()}_${taskUser}.json`;
     fs.writeFileSync(pxeJson, JSON.stringify(taskObj, null, 4));
 
     // save json file for mudule process use
-    const taskPayload = `${confDir}/pxe-${curPxe.id.toString()}_${taskUser}.payload`;
+    const taskPayload = `${confDir}/pxe-${createdPxe.id.toString()}_${taskUser}.payload`;
     fs.writeFileSync(taskPayload, JSON.stringify(taskObj));
 
     // sync changes to the plugin module folder
     try {
       const setupDir = `${rackDir}/pxe/${taskObj.pxe.type}/`;
       // fs.chmodSync(`${setupDir}`, "0755");
-      fs.cpSync(`${confDir}`, `${setupDir}/config`, {
+      fs.cpSync(`${confDir}`, `${setupDir}/_config_`, {
         force: true,
         recursive: true,
         preserveTimestamps: true,
@@ -120,7 +119,7 @@ router.post("/save", verifyToken, grantAccess([1, 2]), async (req, res) => {
 
     return res.status(200).json({});
   } catch (err) {
-    return res.status(500).send(err);
+    return res.status(500).json({ error: "Internal server error", details: err.message });
   }
 });
 

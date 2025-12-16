@@ -1,8 +1,8 @@
 require("module-alias/register");
 const { DataTypes } = require("sequelize");
-const { db } = require("@database/db");
+const db = require("@database/db").context;
 
-const Cluster = db.context.define(
+const Cluster = db.define(
   "Cluster",
   {
     id: {
@@ -18,6 +18,10 @@ const Cluster = db.context.define(
       defaultValue: 0,
     },
     plat_member: {
+      type: DataTypes.BOOLEAN,
+      allowNull: true,
+    },
+    plat_core_cluster: {
       type: DataTypes.BOOLEAN,
       allowNull: true,
     },
@@ -74,7 +78,7 @@ const Cluster = db.context.define(
 
     // load balancer
     balancer_cluster_type: {
-      type: DataTypes.NUMBER,
+      type: DataTypes.STRING,
       allowNull: true,
     },
     balancer_cluster_vip: {
@@ -100,7 +104,7 @@ const Cluster = db.context.define(
 
     // compute cluster
     compute_cluster_type: {
-      type: DataTypes.NUMBER,
+      type: DataTypes.STRING,
       allowNull: true,
     },
     compute_cluster_dashboard: {
@@ -112,9 +116,9 @@ const Cluster = db.context.define(
       allowNull: true,
     },
 
-    // storage ckuster
+    // storage cluster
     storage_cluster_type: {
-      type: DataTypes.NUMBER,
+      type: DataTypes.STRING,
       allowNull: true,
     },
     storage_cluster_share: {
@@ -143,7 +147,7 @@ const Cluster = db.context.define(
     ],
   },
   {
-    timestamps: false,
+    timestamps: true,
     tableName: "clusters",
   }
 );

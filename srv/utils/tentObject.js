@@ -41,9 +41,11 @@ const PopulateTentObject = (adminHostIpv4, currentCluster, currentMembers) => {
 
     // Populate Compute Cluster Details
     const computeNodes = clusterNodes.filter((m) => m.compute_node);
-    const clusterTypeId = currentCluster.compute_cluster_type || 0;
-    const clusterType = curTentModule.computeModules[clusterTypeId].moduleName;
-    const computeRoes = curTentModule.computeModules[clusterTypeId].moduleRoles;
+    const clusterType = currentCluster.compute_cluster_type || "(None)";
+    const module = curTentModule.computeModules.find(m => m.moduleName === clusterType);
+    const computeRoles = module ? module.moduleRoles : [];
+    const clusterTypeId = curTentModule.computeModules.findIndex(m => m.moduleName === clusterType);
+    const computeRoes = computeRoles;
     confObject.compute.type = clusterType;
     confObject.compute.admin = adminHostIpv4;
     confObject.compute.nodes = computeNodes.map((m) => m.ip);
@@ -67,7 +69,7 @@ const PopulateTentObject = (adminHostIpv4, currentCluster, currentMembers) => {
           .filter((m) => (m.compute_role & 2) === 2)
           .map((m) => m.ip);
         break;
-      case "Swarm":
+      case "Docker-Swarm":
         confObject.compute.managers = computeNodes
           .filter((m) => (m.compute_role & 1) === 1)
           .map((m) => m.ip);
@@ -103,8 +105,8 @@ const PopulateTentObject = (adminHostIpv4, currentCluster, currentMembers) => {
 
     // Populate Storage Cluster Details
     const storageNodes = clusterNodes.filter((m) => m.storage_node);
-    const storageTypeId = currentCluster.storage_cluster_type || 0;
-    const storageType = curTentModule.storageModules[storageTypeId].moduleName;
+    const storageType = currentCluster.storage_cluster_type || "(None)";
+    const storageTypeId = curTentModule.storageModules.findIndex(m => m.moduleName === storageType);
     confObject.storage.type = storageType;
     confObject.storage.nodes = storageNodes.map((m) => m.ip);
     switch (storageType) {
@@ -136,9 +138,8 @@ const PopulateTentObject = (adminHostIpv4, currentCluster, currentMembers) => {
 
     // Populate Load Balancer Details
     const balancerNodes = clusterNodes.filter((m) => m.balancer_node);
-    const balancerTypeId = currentCluster.balancer_cluster_type || 0;
-    const balancerType =
-      curTentModule.balancerModules[balancerTypeId].moduleName;
+    const balancerType = currentCluster.balancer_cluster_type || "(None)";
+    const balancerTypeId = curTentModule.balancerModules.findIndex(m => m.moduleName === balancerType);
     confObject.balancer.type = balancerType;
     confObject.balancer.nodes = balancerNodes.map((m) => m.ip);
     confObject.balancer.members = balancerNodes

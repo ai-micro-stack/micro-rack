@@ -17,6 +17,8 @@ function HomePage() {
   useEffect(() => {
     getAuthState().then(({ data }) => {
       setAuthState(data.state);
+    }).catch(() => {
+      setAuthState("config"); // Assume first time if /mode fails
     });
   }, []);
 

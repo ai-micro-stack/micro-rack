@@ -6,6 +6,7 @@ import Logo from "@/assets/logo192.png";
 import "@/pages/UserLogin.css";
 import { Md5 } from "ts-md5";
 import { loginSchema } from "@/utils/validationSchemas";
+import type { ZodIssue } from "zod";
 
 const UserLogin = () => {
   const [inputUsername, setInputUsername] = useState("");
@@ -28,7 +29,7 @@ const UserLogin = () => {
 
     if (!validationResult.success) {
       const errors: Record<string, string> = {};
-      validationResult.error.errors.forEach((err: any) => {
+      validationResult.error.errors.forEach((err: ZodIssue) => {
         if (err.path[0]) errors[err.path[0] as string] = err.message;
       });
       setValidationErrors(errors);
@@ -150,6 +151,7 @@ const UserLogin = () => {
             label="Remember me"
             defaultChecked={inputRemeberMe}
             onChange={(e) => setInputRemeberMe(e.target.checked)}
+            style={{ marginLeft: '85px' }}
           />
         </Form.Group>
         {logining ? (

@@ -1,8 +1,8 @@
 require("module-alias/register");
 const fs = require("fs");
 const path = require('path');
-const { step1Ollma } = require("@modules/plat/llm/Server-Farm/step1_ollama");
-const { step2Service } = require("@modules/plat/llm/Server-Farm/step2_service");
+const { step1Ollma } = require("@modules/plat/llm/LVS-Cluster/step1_ollama");
+const { step2Service } = require("@modules/plat/llm/LVS-Cluster/step2_service");
 //
 const { pull_all_MiniLM_L6_v2 } = require("./pull_all_minilm_l6_v2");
 // const { pull_nomic_embed_text } = require("./pull_nomic_embed_text");

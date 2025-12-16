@@ -1,10 +1,10 @@
 require("module-alias/register");
 const { QueryTypes } = require("sequelize");
-const { db } = require("@database/db");
+const db = require("@database/db").context;
 
 const dbTableCheck = (tableName) => {
   // return a Promise of {count: 1 or 0}
-  return db.context.query(
+  return db.query(
     "SELECT count(*) as count FROM sqlite_master WHERE type = ? AND name = ?",
     {
       replacements: ["table", tableName],

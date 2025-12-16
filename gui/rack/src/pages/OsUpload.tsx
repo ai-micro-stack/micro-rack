@@ -251,7 +251,7 @@ function OsUpload() {
                         <Button
                           className="remove-btn float-end"
                           variant="danger"
-                          size="sm"
+                          style={{ padding: '0.125rem 0.25rem', fontSize: '0.75rem' }}
                           onClick={() => removeFile(iso.file)}
                         >
                           &times; Delete
@@ -266,7 +266,7 @@ function OsUpload() {
                         <Button
                           className="remove-btn float-end"
                           variant="danger"
-                          size="sm"
+                          style={{ padding: '0.125rem 0.25rem', fontSize: '0.75rem' }}
                           onClick={() => removeFile(zip.file)}
                         >
                           &times; Delete

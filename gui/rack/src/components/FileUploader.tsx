@@ -259,6 +259,7 @@ export const FileDownloader = ({
   className,
   variant,
   size,
+  style,
 }: {
   fileName: string;
   channelParam?: string;
@@ -267,6 +268,7 @@ export const FileDownloader = ({
   className?: string;
   variant?: string;
   size?: "sm" | "lg" | undefined;
+  style?: React.CSSProperties;
 }) => {
   const channel = channelParam !== undefined ? `${channelParam}` : "";
   const backendUrl = receiverUrl !== undefined ? receiverUrl : backend;
@@ -296,6 +298,7 @@ export const FileDownloader = ({
       className={className ?? "remove-btn float-end"}
       variant={variant ?? "success"}
       size={size}
+      style={style}
       value="download"
       onClick={handleDownload}
     >

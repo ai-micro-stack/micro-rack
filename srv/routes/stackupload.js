@@ -7,7 +7,7 @@ const { populateStaticData } = require("@utils/rackStaticParser");
 const platDir = "./modules/plat";
 const tentDir = "./modules/tent";
 const rackDir = "./modules/rack";
-const confDir = `${rackDir}/config`;
+const confDir = `${rackDir}/_config_`;
 const setupDir = `${rackDir}/pxe/ipxe`;
 const ConfFile = `${confDir}/pxe-server.conf`;
 
@@ -27,10 +27,10 @@ const pxeBootRoot = fs
 const pxeRoot = pxeBootRoot[0] ? pxeBootRoot[0] : "/pxeboot";
 const isoStore = `${pxeRoot}/os-store/`;
 const plgStore = `${setupDir}/plugin/`;
-const cfgStore = `${rackDir}/config/`;
-const rackStore = `${rackDir}/config/`;
-const tenttore = `${tentDir}/config/`;
-const platStore = `${platDir}/config/`;
+const cfgStore = `${rackDir}/_config_/`;
+const rackStore = `${rackDir}/_config_/`;
+const tenttore = `${tentDir}/_config_/`;
+const platStore = `${platDir}/_config_/`;
 
 const channelToFileStore = {
   isoUpload: isoStore,

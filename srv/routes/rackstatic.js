@@ -21,7 +21,7 @@ dotenv.config({ path: `.env.${environment}` });
 const { SERVICE_USER, SERVICE_PASS, SERVICE_CERT } = process.env;
 
 const rackDir = "./modules/rack";
-const confDir = `${rackDir}/config`;
+const confDir = `${rackDir}/_config_`;
 // const setupDir = `${rackDir}/pxe/ipxe`;
 // const ConfFile = `${confDir}/pxe-server.conf`;
 

@@ -6,7 +6,12 @@
   "scripts": {
     "test": "test",
     "server": "node server.js",
-    "prod": "NODE_ENV=production node server.js"
+    "prod": "NODE_ENV=production node server.js",
+    "migrate": "sequelize-cli db:migrate",
+    "migrate:undo": "sequelize-cli db:migrate:undo",
+    "migrate:undo:all": "sequelize-cli db:migrate:undo:all",
+    "seed": "sequelize-cli db:seed:all",
+    "seed:undo": "sequelize-cli db:seed:undo:all"
   },
   "keywords": [
     "pxeboot",
@@ -40,5 +45,8 @@
     "@routes": "./routes",
     "@consts": "./consts",
     "@utils": "./utils"
+  },
+  "devDependencies": {
+    "sequelize-cli": "^6.6.3"
   }
 }

@@ -1,8 +1,8 @@
 require("module-alias/register");
 const { DataTypes } = require("sequelize");
-const { db } = require("@database/db");
+const db = require("@database/db").context;
 
-const Role = db.context.define(
+const Role = db.define(
   "Role",
   {
     id: {
@@ -10,6 +10,7 @@ const Role = db.context.define(
       primaryKey: true,
       allowNull: false,
       unique: true,
+      autoIncrement: true,
     },
     role: {
       type: DataTypes.STRING,
@@ -17,7 +18,7 @@ const Role = db.context.define(
     },
   },
   {
-    timestamps: false,
+    timestamps: true,
     tableName: "roles",
   }
 );

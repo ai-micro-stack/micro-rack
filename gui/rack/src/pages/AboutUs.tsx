@@ -6,32 +6,32 @@ function AboutUs() {
     {
       icon: "micro-rack.png",
       title: "Micro Rack",
-      text: "A pxe-boot enviroment setup & managing application. Using user uploaded OS, it is able to boot up the computers from a few to a million in same subnet. Combining with the Micro-Orchestration, another app in this Micro-Stack series, it is able to setup an AI research & developent enviroment easily.",
+      text: "A PXE-boot environment setup and management application. Using user-uploaded OS images, it can boot computers ranging from a few to a million on the same subnet. Combined with Micro-Orchestration, another app in the Micro-Stack series, it easily sets up an AI research and development environment.",
     },
     {
       icon: "free-use.png",
       title: "Free Use",
-      text: "Completely free use for any commericals, non profit organizations and individual researchers. Will charge some time cost for technical supports. No registration requirement to suers, authos even don't know who is using their software, but a feedback is valuable for authers to improve the software.",
+      text: "Completely free for use by any commercial, non-profit organizations, and individual researchers. We may charge a time-based fee for technical support. No registration is required; authors don't even know who's using their software, but feedback is valuable for authors to improve the software.",
     },
     {
       icon: "open-source.png",
       title: "Open Source",
-      text: "Complely Open source. Users can build the whole thing from the source code to have the private version of the solftware that belongs to themselves. Make a github star or write a review post on any tech site are also valuable helps to let more people know it. If you clone the souce code for your development, it is apprecated to give the credit to original authors, but not a requirement.",
+      text: "Completely open source. Users can build the entire application from source code to create their own private version. Giving it a GitHub star or writing a review on any tech site is a valuable way to help spread the word. If you clone the source code for your own development, it's appreciated to credit the original authors, but it's not required.",
     },
     {
       icon: "user-plugin.png",
       title: "User Plugin",
-      text: "The software takes open architecture. All features are implemented in modules and plugins. Users can develop their plugins by customizing the template presented in the source code to support the specical OS boot requirements. All frontend code is wroten in TypeScript, and backend code are writen in JavaScript combing Linux shell script.",
+      text: "The software features an open architecture. All features are implemented as modules and plugins. Users can develop their own plugins by customizing the templates in the source code to support special OS boot requirements. All frontend code is written in TypeScript, and backend code is written in JavaScript combined with Linux shell scripts.",
     },
     {
       icon: "contributors.png",
       title: "Contributing",
-      text: "Welcome the contributors to join the project to improve the software quality and expand the new features. Programming skills in TypeScript is the reqirement, as the code builder needs to pass the code integritiy check to start. Progamming in cansual code style would not pass the check.",
+      text: "We welcome contributors to join the project to improve software quality and add new features. Programming skills in TypeScript are helpful. Please do the code integrity and build check before making a pull request. Whether you're fixing bugs, writing documentation, testing features, or suggesting improvements. Join our community on GitHub to get started and collaborate with fellow contributors.",
     },
     {
       icon: "sponsorship.png",
       title: "Sponsorship",
-      text: "The software is developed and maintained by volunteer contributors, and resources used in project is paid from themselve's pockets. Looking forward to the finacial supportings or adoption to keep this project and the consequences running. Thank you for your time and attention to read it down to here!",
+      text: "The software is developed by dedicated volunteers using their own resources. If you'd like to support the project and help with future developments, sponsorships and financial support are welcome. Your contribution would help maintain the quality and growth of this open-source initiative. Thank you for considering supporting us!",
     },
   ];
   const cstyle = {

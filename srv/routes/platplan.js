@@ -16,14 +16,14 @@ Host.belongsTo(Cluster, { foreignKey: "cluster_id" });
 
 async function setDefault() {
   try {
-    const [plat, created] = await Plat.findOrCreate({
-      where: { plat_name: defaultPlat.plat_name },
-      defaults: { ...defaultPlat, id: 0 },
-    });
-    if (created) console.log("Default plat is created:", plat.toJSON());
-    await Cluster.update({ plat_id: plat.id }, { where: { plat_id: null } });
+    const existing = await Plat.findOne({ where: { plat_name: defaultPlat.plat_name } });
+    if (!existing) {
+      const plat = await Plat.create({ ...defaultPlat, id: 0 });
+      console.log("Default plat created:", plat.toJSON());
+      await Cluster.update({ plat_id: plat.id }, { where: { plat_id: null } });
+    }
   } catch (err) {
-    console.log("Error finding or creating default plat:", err);
+    console.log("Error with default plat:", err);
   }
 }
 
@@ -34,15 +34,7 @@ router.get(
   async (req, res) => {
     await setDefault();
     try {
-      await Plat.findAll({
-        // where: {
-        //   [Op.and]: [
-        //     {
-        //       plat_name: { [Op.notLike]: defaultPlat.plat_name },
-        //     },
-        //     { plat_name: { [Op.ne]: "" } },
-        //   ],
-        // },
+      const result = await Plat.findAll({
         include: [
           {
             model: Cluster,
@@ -71,66 +63,49 @@ router.get(
             },
           },
         ],
-      }).then((result) => {
-        const plats = result.map((p) => {
-          const clusters = p.Clusters.map((c) => {
-            const compute_nodes = c.Hosts.filter((h) => h.compute_node).length;
-            const storage_nodes = c.Hosts.filter((h) => h.storage_node).length;
-            const balancer_nodes = c.Hosts.filter(
-              (h) => h.balancer_node
-            ).length;
-            return {
-              admin_subnet: c.Subnet?.cidr,
-              cluster_id: c.id,
-              cluster_name: c.cluster_name,
-              cluster_nodes: c.Hosts.length,
-              compute_nodes: compute_nodes,
-              storage_nodes: storage_nodes,
-              balancer_nodes: balancer_nodes,
-              // cluster_status: c.Hosts.length ? storage_nodes : 0, //dummy data
-              //
-              plat_member: c.plat_member,
-              balancer_cluster_vip: c.balancer_cluster_vip,
-              balancer_protocol: c.balancer_protocol,
-              balancer_port: c.balancer_port,
-              embedding_member: c.embedding_member,
-              embedding_model: c.embedding_model,
-              vectordb_member: c.vectordb_member,
-              vectordb_vendor: c.vectordb_vendor,
-              llm_member: c.llm_member,
-              llm_model: c.llm_model,
-              compute_cluster_type: c.compute_cluster_type,
-              storage_cluster_type: c.storage_cluster_type,
-              storage_cluster_share: c.storage_cluster_share,
-              balancer_cluster_type: c.balancer_cluster_type,
-              Hosts: c.Hosts,
-            };
-          });
+      });
+      const plats = result.map((p) => {
+        const clusters = p.Clusters.map((c) => {
+          const compute_nodes = c.Hosts.filter((h) => h.compute_node).length;
+          const storage_nodes = c.Hosts.filter((h) => h.storage_node).length;
+          const balancer_nodes = c.Hosts.filter(
+            (h) => h.balancer_node
+          ).length;
           return {
-            id: p.id,
-            plat_name: p.plat_name,
-            plat_note: p.plat_note,
-            plat_type: p.plat_type,
-            plat_vip: p.plat_vip,
-            is_active: p.is_active,
-            is_locked: p.is_locked,
-            build_auto_lock: p.build_auto_lock,
-            embedding_model_server: p.embedding_model_server,
-            embedding_model_store: p.embedding_model_store,
-            llm_model_server: p.llm_model_server,
-            llm_model_store: p.llm_model_store,
-            vectordb_data_server: p.vectordb_data_server,
-            vectordb_data_store: p.vectordb_data_store,
-            createdAt: p.createdAt,
-            updatedAT: p.updatedAt,
-            Clusters: clusters,
+            admin_subnet: c.Subnet?.cidr,
+            cluster_id: c.id,
+            cluster_name: c.cluster_name,
+            cluster_nodes: c.Hosts.length,
+            compute_nodes: compute_nodes,
+            storage_nodes: storage_nodes,
+            balancer_nodes: balancer_nodes,
+            plat_member: c.plat_member,
+            balancer_cluster_vip: c.balancer_cluster_vip,
+            balancer_protocol: c.balancer_protocol,
+            balancer_port: c.balancer_port,
+            embedding_member: c.embedding_member,
+            embedding_model: c.embedding_model,
+            vectordb_member: c.vectordb_member,
+            vectordb_vendor: c.vectordb_vendor,
+            llm_member: c.llm_member,
+            llm_model: c.llm_model,
+            compute_cluster_type: c.compute_cluster_type,
+            storage_cluster_type: c.storage_cluster_type,
+            storage_cluster_share: c.storage_cluster_share,
+            balancer_cluster_type: c.balancer_cluster_type,
+            plat_core_cluster: c.plat_core_cluster,
+            Hosts: c.Hosts,
           };
         });
-        return res.status(200).json(plats);
+        return {
+          ...p.dataValues,
+          Clusters: clusters,
+        };
       });
+      return res.status(200).json(plats);
     } catch (err) {
       console.log(err);
-      return res.status(500).send(err);
+      return res.status(500).json({ error: "Internal server error", details: err.message });
     }
   }
 );
@@ -153,25 +128,50 @@ router.post("/save", verifyToken, grantAccess([1, 2]), async (req, res) => {
 });
 
 router.post("/create", verifyToken, grantAccess([1, 2]), async (req, res) => {
-  const { id, ...plat } = req.body;
+  const { id, selectedCoreCluster, ...plat } = req.body;
   try {
-    AddPlat(plat).then((result) => {
-      return res.status(200).json(result);
-    });
+    const result = await AddPlat(plat);
+    // Update plat_core_cluster on clusters
+    if (selectedCoreCluster) {
+      await Cluster.update(
+        { plat_id: result.id, plat_core_cluster: true, plat_member: true },
+        { where: { cluster_name: selectedCoreCluster } }
+      );
+    }
+    return res.status(200).json(result);
   } catch (err) {
     return res.status(500).send(err);
   }
 });
 
 router.post("/update", verifyToken, grantAccess([1, 2]), async (req, res) => {
-  const plat = req.body;
+  const { selectedCoreCluster, ...plat } = req.body;
   try {
-    UpdatePlat(plat).then(async (result) => {
-      return res.status(200).json(result);
-    });
+    const result = await UpdatePlat(plat);
+    // Update plat_core_cluster on clusters
+    await Cluster.update(
+      { plat_core_cluster: false },
+      { where: { plat_id: plat.id } }
+    );
+    // Update plat_member for clusters where none of embedding_member, vectordb_member, or llm_member is true
+    await Cluster.update(
+      { plat_member: false },
+      { where: { plat_id: plat.id, embedding_member: { [Op.ne]: true }, vectordb_member: { [Op.ne]: true }, llm_member: { [Op.ne]: true } } }
+    );
+    // Clear plat_id for clusters where plat_member is null or false
+    await Cluster.update(
+      { plat_id: 0 },
+      { where: { plat_id: plat.id, plat_member: { [Op.or]: [null, false] } } }
+    );
+    if (selectedCoreCluster) {
+      await Cluster.update(
+        { plat_id: plat.id, plat_core_cluster: true, plat_member: true },
+        { where: { cluster_name: selectedCoreCluster } }
+      );
+    }
+    return res.status(200).json(result);
   } catch (err) {
     return res.status(500).send(err);
-    plat;
   }
 });
 
@@ -181,6 +181,11 @@ router.delete("/delete", verifyToken, grantAccess([1, 2]), async (req, res) => {
   if (!plat) {
     return res.status(202).json({ message: `Record not found: ${platId}` });
   } else {
+    // Reset member clusters' settings
+    await Cluster.update(
+      { plat_core_cluster: false, plat_member: false, plat_id: 0 },
+      { where: { plat_id: platId } }
+    );
     await plat
       .destroy()
       .then((result) => {

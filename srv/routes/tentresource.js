@@ -42,7 +42,7 @@ router.get("/hosts", async (req, res) => {
   Host.belongsTo(Cluster, { foreignKey: "cluster_id" });
   const macList = nicData.map((n) => n.nic_mac);
   try {
-    await Interface.findAll({
+    const result = await Interface.findAll({
       where: { nic_mac: macList },
       include: [
         {
@@ -57,11 +57,10 @@ router.get("/hosts", async (req, res) => {
           ],
         },
       ],
-    }).then((result) => {
-      return res.status(200).json({ Interfaces: result });
     });
+    return res.status(200).json({ Interfaces: result });
   } catch (err) {
-    return res.status(500).send(err);
+    return res.status(500).json({ error: "Internal server error", details: err.message });
   }
 });
 
@@ -143,12 +142,11 @@ router.post("/save", verifyToken, grantAccess([1, 2]), async (req, res) => {
     (h) => !(h.is_active || h.cluster_node || h.compute_node || h.storage_node)
   ).map((h) => h.ip);
   try {
-    AddHosts(Hosts).then(async () => {
-      await Host.destroy({ where: { cluster_id, ip: removal } });
-      return res.status(200).json({});
-    });
+    await AddHosts(Hosts);
+    await Host.destroy({ where: { cluster_id, ip: removal } });
+    return res.status(200).json({});
   } catch (err) {
-    return res.status(500).send(err);
+    return res.status(500).json({ error: "Internal server error", details: err.message });
   }
 });
 
@@ -171,7 +169,7 @@ router.post("/name", verifyToken, grantAccess([1, 2]), async (req, res) => {
 
     return res.status(200).json({ hosts: hosts });
   } catch (err) {
-    return res.status(500).send(err);
+    return res.status(500).json({ error: "Internal server error", details: err.message });
   }
 });
 
@@ -228,7 +226,7 @@ router.post("/dnsr", verifyToken, grantAccess([1, 2]), async (req, res) => {
 
     return res.status(200).json({ hosts: hci_hosts });
   } catch (err) {
-    return res.status(500).send(err);
+    return res.status(500).json({ error: "Internal server error", details: err.message });
   }
 });
 

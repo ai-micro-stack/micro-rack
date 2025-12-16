@@ -1,8 +1,8 @@
 require("module-alias/register");
 const { DataTypes } = require("sequelize");
-const { db } = require("@database/db");
+const db = require("@database/db").context;
 
-const Resource = db.context.define(
+const Resource = db.define(
   "Resource",
   {
     id: {
@@ -17,7 +17,7 @@ const Resource = db.context.define(
     },
   },
   {
-    timestamps: false,
+    timestamps: true,
     tableName: "resources",
   }
 );

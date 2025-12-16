@@ -16,13 +16,8 @@ const { JWT_SECRET_KEY } = process.env;
 // User self registration (not in use yet)
 router.get("/mode", async (req, res) => {
   try {
-    dbTableCheck("users")
-      .then((ret) => {
-        res.status(201).json({ state: ret.count === 0 ? "config" : "using" });
-      })
-      .catch((error) => {
-        throw new Error(error);
-      });
+    const ret = await dbTableCheck("users");
+    res.status(201).json({ state: ret.count === 0 ? "config" : "using" });
   } catch (error) {
     res.status(500).json({ error: "Api internal failure." });
   }
@@ -32,9 +27,8 @@ router.get("/mode", async (req, res) => {
 router.post("/register", async (req, res) => {
   try {
     const { username, password, email } = req.body;
-    stackFirstUser({ username, password, email }).then((result) =>
-      res.status(201).json(result)
-    );
+    const result = await stackFirstUser({ username, password, email });
+    res.status(201).json(result);
   } catch (err) {
     res.status(500).json({
       state: -1,

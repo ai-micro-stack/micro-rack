@@ -87,9 +87,9 @@ function socketServer(httpServer, ssh2Config) {
 
           stream
             .on("data", function (d) {
-              // socket.emit("data", utf8.decode(d.toString("binary")));
-              socket.emit("data", removeCtlChars(d.toString()));
-              // socket.emit("data", d.toString("binary"));
+              // Decode the Buffer as UTF-8 string, keeping control characters for terminal emulation
+              socket.emit("data", d.toString('utf8'));
+              // Original: socket.emit("data", removeCtlChars(d.toString()));
             })
             .on("close", function () {
               ssh.end();

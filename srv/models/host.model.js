@@ -1,8 +1,8 @@
 require("module-alias/register");
 const { DataTypes } = require("sequelize");
-const { db } = require("@database/db");
+const db = require("@database/db").context;
 
-const Host = db.context.define(
+const Host = db.define(
   "Host",
   {
     id: {
@@ -90,7 +90,7 @@ const Host = db.context.define(
     ],
   },
   {
-    timestamps: false,
+    timestamps: true,
     tableName: "hosts",
   }
 );

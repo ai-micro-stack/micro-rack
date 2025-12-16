@@ -1,8 +1,8 @@
 require("module-alias/register");
 const { DataTypes } = require("sequelize");
-const { db } = require("@database/db");
+const db = require("@database/db").context;
 
-const Subnet = db.context.define(
+const Subnet = db.define(
   "Subnet",
   {
     id: {
@@ -82,7 +82,7 @@ const Subnet = db.context.define(
     },
   },
   {
-    timestamps: false,
+    timestamps: true,
     tableName: "subnets",
   }
 );

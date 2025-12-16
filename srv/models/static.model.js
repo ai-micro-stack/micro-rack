@@ -1,8 +1,8 @@
 require("module-alias/register");
 const { DataTypes } = require("sequelize");
-const { db } = require("@database/db");
+const db = require("@database/db").context;
 
-const Static = db.context.define(
+const Static = db.define(
   "Static",
   {
     id: {
@@ -46,7 +46,7 @@ const Static = db.context.define(
     },
   },
   {
-    timestamps: false,
+    timestamps: true,
     tableName: "statics",
   }
 );

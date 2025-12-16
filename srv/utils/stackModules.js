@@ -47,7 +47,7 @@ function ScanStackModules(stack, moduleTypes, moduleDatabase) {
     const folderList = fs
       .readdirSync(modulePath, { withFileTypes: true })
       .filter((t) => {
-        return t.isDirectory && t.name !== "config";
+        return t.isDirectory && t.name !== "_config_";
       })
       .map((t) => {
         return t.name.toString();

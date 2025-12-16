@@ -380,7 +380,7 @@ function BootImage() {
                         <Button
                           className="remove-btn float-end"
                           variant="danger"
-                          size="sm"
+                          style={{ padding: '0.125rem 0.25rem', fontSize: '0.75rem' }}
                           onClick={() => removeFile(plg.file)}
                         >
                           &times; Delete
@@ -389,7 +389,7 @@ function BootImage() {
                           fileName={plg.file}
                           channelParam={uploadChannel}
                           // receiverUrl={`${uploaderBackend}/file`}
-                          size={"sm"}
+                          style={{ padding: '0.125rem 0.25rem', fontSize: '0.75rem' }}
                         />
                       </>
                     )}
@@ -413,6 +413,7 @@ function BootImage() {
                       name="radio"
                       value={iso.file ?? ""}
                       checked={menuDefault === os.osName}
+                      style={{ padding: '4px 8px', fontSize: '14px' }}
                       onChange={(e) => defaultPicker(e.currentTarget.id)}
                     ></ToggleButton>
                   </td>

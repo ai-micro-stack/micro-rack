@@ -8,7 +8,7 @@ const { verifyToken, grantAccess } = require("@middleware/authMiddleware");
 
 // Set the installer backend location of the pxe server setup scripts running enviroment
 const rackDir = "./modules/rack";
-const confDir = `${rackDir}/config`;
+const confDir = `${rackDir}/_config_`;
 const setupDir = `${rackDir}/pxe/ipxe`;
 const ConfFile = `${confDir}/pxe-server.conf`;
 

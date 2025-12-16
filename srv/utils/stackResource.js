@@ -1,6 +1,6 @@
 require("module-alias/register");
 const { createConnection } = require("node:net");
-const { db } = require("@database/db");
+const { context: db } = require("@database/db");
 const Plat = require("@models/plat.model");
 const Interface = require("@models/interface.model");
 const Subnet = require("@models/subnet.model");

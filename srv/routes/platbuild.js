@@ -6,7 +6,7 @@ const fs = require("fs");
 const { StackModules } = require("@utils/stackModules");
 const { PopulatePlatObject } = require("@utils/platObject");
 const platDir = "./modules/plat";
-const confDir = `${platDir}/config`;
+const confDir = `${platDir}/_config_`;
 const { AddTask } = require("@utils/taskQueue");
 const { pluginModuleTypes } = require("@consts/constant");
 const { verifyToken, grantAccess } = require("@middleware/authMiddleware");
@@ -51,8 +51,7 @@ router.post("/conf", verifyToken, grantAccess([1, 2]), (req, res) => {
 
     return res.status(201).send({ status: "SAVE_SETTINGS_COMPLETED" });
   } catch (err) {
-    res.status(500).send(`Failed to save ai platform settings: ${err}`);
-    res.end();
+    res.status(500).json({ error: "Failed to save ai platform settings", details: err.message });
   }
 });
 
@@ -85,7 +84,7 @@ router.post("/build", verifyToken, grantAccess([1, 2]), async (req, res) => {
       let members = taskObj[area].members;
       if (taskObj[area].members.length === 0) return;
       for (let i = 0; i < members.length; i++) {
-        // member: Kubernets. Server-Farm or Swarm
+        // member: Kubernets. LVS-Cluster or Docker-Swarm
         let member = members[i];
         let module = member[area + "_module"];
         if (module === "(None)") return;
@@ -105,8 +104,7 @@ router.post("/build", verifyToken, grantAccess([1, 2]), async (req, res) => {
 
     return res.status(201).send({ status: "APPLYING_SETTINGS_COMPLETED" });
   } catch (err) {
-    res.status(500).send(`Failed to build the AI plat: ${err}`);
-    res.end();
+    res.status(500).json({ error: "Failed to build the AI plat", details: err.message });
   }
 });
 
@@ -140,8 +138,7 @@ router.post("/dash", verifyToken, grantAccess([1, 2]), async (req, res) => {
     }
     res.status(201).send({ status: "Portainer setup complete" });
   } catch (err) {
-    res.status(500).send(`Failed to complete portainer-setup script: ${err}`);
-    res.end();
+    res.status(500).json({ error: "Failed to complete portainer-setup script", details: err.message });
   }
 });
 

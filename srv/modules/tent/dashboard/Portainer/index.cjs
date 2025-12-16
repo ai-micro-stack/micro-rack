@@ -19,7 +19,7 @@ async function portainer(confObj, area) {
 if (process.argv.length < 4) {
   console.log("Missing conf file argument. Quit task process ...");
 } else {
-  const supportClusters = ["Swarm", "Kubernetes"];
+  const supportClusters = ["Docker-Swarm", "Kubernetes"];
   const confObjPath = process.argv[2];
   const area = process.argv[3];
 

@@ -247,7 +247,7 @@ function TeamMember() {
                     <Button
                       className="edit-btn"
                       variant="danger"
-                      size="sm"
+                      style={{ padding: '0.125rem 0.25rem', fontSize: '0.75rem' }}
                       onClick={() => handleModalShow(member.uuid)}
                     >
                       <b>&#9998; Edit</b>
@@ -255,7 +255,7 @@ function TeamMember() {
                     <Button
                       className="remove-btn"
                       variant="danger"
-                      size="sm"
+                      style={{ padding: '0.125rem 0.25rem', fontSize: '0.75rem' }}
                       onClick={() => memberDelete(member.uuid)}
                     >
                       <b>&#10005; Delete</b>

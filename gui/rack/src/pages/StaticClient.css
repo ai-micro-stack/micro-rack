@@ -24,3 +24,22 @@ tfoot th {
 button:disabled {
   opacity: 0.5;
 }
+
+.edit-cell-container {
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+}
+
+.edit-cell-action button {
+  padding: 1px 3px;
+  font-size: 14px;
+  border: 1px solid #ddd;
+  background-color: #f8f9fa;
+  cursor: pointer;
+  border-radius: 3px;
+}
+
+.edit-cell-action button:hover {
+  background-color: #e9ecef;
+}

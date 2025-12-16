@@ -9,6 +9,7 @@ import getAuthState from "@/utils/getAuthState";
 import Loading from "@/pages/Loading";
 import { Md5 } from "ts-md5";
 import { registerSchema } from "@/utils/validationSchemas";
+import type { ZodIssue } from "zod";
 
 const { VITE_API_SCHEME, VITE_API_SERVER, VITE_API_PORT } = import.meta.env;
 const urlPort =
@@ -64,7 +65,7 @@ function Register() {
 
     if (!validationResult.success) {
       const errors: Record<string, string> = {};
-      validationResult.error.errors.forEach((err: any) => {
+      validationResult.error.errors.forEach((err: ZodIssue) => {
         if (err.path[0]) errors[err.path[0] as string] = err.message;
       });
       setValidationErrors(errors);
@@ -131,16 +132,14 @@ function Register() {
           <div className="d-flex justify-content-end">
             <Button
               onClick={() => {
-                // setAlertState({ state: 0, message: "" });
                 setShowAlert(false);
                 if (alertState.state === 0) {
                   navigate("/user-login");
                 } else if (alertState.state === 1) {
                   navigate("/");
-                } 
-                // else if (alertState.state < 0) {
-                //   navigate("/register");
-                // }
+                } else if (alertState.state < 0) {
+                  setAlertState({ state: 0, message: "" });
+                }
               }}
               variant="outline-success"
             >
@@ -160,6 +159,7 @@ function Register() {
                 className="form-control"
                 placeholder="Enter username"
                 name="username"
+                value={username}
                 onChange={changeHandler}
                 isInvalid={!!validationErrors.username}
               />
@@ -174,6 +174,7 @@ function Register() {
                 className="form-control"
                 placeholder="Enter email"
                 name="email"
+                value={email}
                 onChange={changeHandler}
                 isInvalid={!!validationErrors.email}
               />
@@ -188,6 +189,7 @@ function Register() {
                 className="form-control"
                 placeholder="Enter password"
                 name="password"
+                value={password}
                 onChange={changeHandler}
                 isInvalid={!!validationErrors.password}
               />
@@ -202,6 +204,7 @@ function Register() {
                 className="form-control"
                 placeholder="Retype password"
                 name="password2"
+                value={password2}
                 onChange={changeHandler}
                 isInvalid={!!validationErrors.password2}
               />
@@ -215,6 +218,7 @@ function Register() {
                 label="Do not expose this UI to Internet."
                 // defaultValue={false}
                 name="acknowledge"
+                checked={acknowledge}
                 onChange={(e) => {
                   setFormData({
                     ...formData,

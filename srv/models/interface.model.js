@@ -1,8 +1,8 @@
 require("module-alias/register");
 const { DataTypes } = require("sequelize");
-const { db } = require("@database/db");
+const db = require("@database/db").context;
 
-const Interface = db.context.define(
+const Interface = db.define(
   "Interface",
   {
     id: {
@@ -34,7 +34,7 @@ const Interface = db.context.define(
     ],
   },
   {
-    timestamps: false,
+    timestamps: true,
     tableName: "interfaces",
   }
 );

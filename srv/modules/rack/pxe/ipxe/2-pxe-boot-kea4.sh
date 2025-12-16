@@ -66,7 +66,7 @@ echo ""
 _SCRIPT_DIR="${0%/*}"
 if [[ ! -d "$_SCRIPT_DIR" ]]; then _SCRIPT_DIR="$PWD"; fi
 
-# . "$_SCRIPT_DIR/config/pxe-server.conf"
+# . "$_SCRIPT_DIR/_config_/pxe-server.conf"
 
 echo "Server configuration:"
 _REQUISITES=(
@@ -86,7 +86,7 @@ _REQUISITES=(
     "NTP_SERVER"
     "ISO_UTILS"
 )
-tr -d '\r' <"$_SCRIPT_DIR/config/pxe-server.conf" >/tmp/pxe-server.conf
+tr -d '\r' <"$_SCRIPT_DIR/_config_/pxe-server.conf" >/tmp/pxe-server.conf
 for _req in "${_REQUISITES[@]}"; do
     while IFS='= ' read -r lhs rhs; do
         if [[ $_req == $lhs ]] && [[ ! $lhs =~ ^\ *# && -n $lhs ]]; then

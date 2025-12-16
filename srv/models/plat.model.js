@@ -1,8 +1,8 @@
 require("module-alias/register");
 const { DataTypes } = require("sequelize");
-const { db } = require("@database/db");
+const db = require("@database/db").context;
 
-const Plat = db.context.define(
+const Plat = db.define(
   "Plat",
   {
     id: {
@@ -43,6 +43,15 @@ const Plat = db.context.define(
       allowNull: true,
     },
 
+    core_gateway_service: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    core_auth_ima_service: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+
     // detail conf
     embedding_model_server: {
       type: DataTypes.STRING,
@@ -78,8 +87,8 @@ const Plat = db.context.define(
     ],
   },
   {
-    timestamps: false,
-    tableName: "ragapps",
+    timestamps: true,
+    tableName: "plats",
   }
 );
 

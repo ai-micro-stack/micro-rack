@@ -1,8 +1,8 @@
 require("module-alias/register");
 const { DataTypes } = require("sequelize");
-const { db } = require("@database/db");
+const db = require("@database/db").context;
 
-const Type = db.context.define(
+const Type = db.define(
   "Type",
   {
     id: {
@@ -10,6 +10,7 @@ const Type = db.context.define(
       primaryKey: true,
       allowNull: false,
       unique: true,
+      autoIncrement: true,
     },
     type: {
       type: DataTypes.STRING,
@@ -17,7 +18,7 @@ const Type = db.context.define(
     },
   },
   {
-    timestamps: false,
+    timestamps: true,
     tableName: "types",
   }
 );

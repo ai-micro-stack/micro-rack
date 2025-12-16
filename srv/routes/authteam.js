@@ -11,17 +11,10 @@ const { verifyToken, grantAccess } = require("@middleware/authMiddleware");
 
 router.get("/roles", async (req, res) => {
   try {
-    await Role.findAll({
+    const result = await Role.findAll({
       attributes: ["id", "role"],
-    })
-      .then((result) => {
-        return res.status(200).json(result);
-      })
-      .catch((error) => {
-        return res.status(400).json({
-          message: `Unable to fetch records! ${error}`,
-        });
-      });
+    });
+    return res.status(200).json(result);
   } catch (err) {
     return res.status(500).send(err);
   }
@@ -33,7 +26,7 @@ router.get(
   grantAccess([1, 2, 9]),
   async (req, res) => {
     try {
-      await User.findAll({
+      const result = await User.findAll({
         attributes: [
           "uuid",
           "username",
@@ -44,17 +37,10 @@ router.get(
           "active",
         ],
         // where: { uuid: req.params.uuid },
-      })
-        .then((result) => {
-          return res
-            .status(200)
-            .json({ dhcpDomain: getConfValue("dhcpDomain"), members: result });
-        })
-        .catch((error) => {
-          return res.status(400).json({
-            message: `Unable to fetch records! ${error}`,
-          });
-        });
+      });
+      return res
+        .status(200)
+        .json({ dhcpDomain: getConfValue("dhcpDomain"), members: result });
     } catch (err) {
       return res.status(500).send(err);
     }
@@ -67,15 +53,8 @@ router.get(
   grantAccess([1, 2, 9]),
   async (req, res) => {
     try {
-      await User.findOne({ where: { uuid: req.params.uuid } })
-        .then((result) => {
-          return res.status(200).json(result);
-        })
-        .catch((error) => {
-          return res.status(400).json({
-            message: `Unable to fetch records! ${error}`,
-          });
-        });
+      const result = await User.findOne({ where: { uuid: req.params.uuid } });
+      return res.status(200).json(result);
     } catch (err) {
       return res.status(500).send(err);
     }
@@ -105,20 +84,19 @@ router.post("/create", verifyToken, grantAccess([1, 2]), async (req, res) => {
     password: hashedPassword,
     role_id: role_id ? role_id : 0,
     active: active ? active : true,
+    createdDate: new Date(),
   });
-  await user
-    .save()
-    .then((result) => {
-      return res.status(200).json({
-        message: "Record created successfully.",
-        entity: result,
-      });
-    })
-    .catch((error) => {
-      return res.status(500).json({
-        message: `Unable to save the member data! ${error}`,
-      });
+  try {
+    const result = await user.save();
+    return res.status(200).json({
+      message: "Record created successfully.",
+      entity: result,
     });
+  } catch (error) {
+    return res.status(500).json({
+      message: `Unable to save the member data! ${error}`,
+    });
+  }
 });
 
 router.post("/update", verifyToken, grantAccess([1, 2]), async (req, res) => {
@@ -138,19 +116,17 @@ router.post("/update", verifyToken, grantAccess([1, 2]), async (req, res) => {
   }
   user.role_id = req.body.role_id;
   user.active = req.body.active;
-  await user
-    .save()
-    .then((result) => {
-      return res.status(200).json({
-        message: "Record updated successfully.",
-        entity: result,
-      });
-    })
-    .catch((error) => {
-      return res.status(400).json({
-        message: `Unable to update record! ${error}`,
-      });
+  try {
+    const result = await user.save();
+    return res.status(200).json({
+      message: "Record updated successfully.",
+      entity: result,
     });
+  } catch (error) {
+    return res.status(400).json({
+      message: `Unable to update record! ${error}`,
+    });
+  }
 });
 
 router.delete("/delete", verifyToken, grantAccess([1, 2]), async (req, res) => {
@@ -159,19 +135,17 @@ router.delete("/delete", verifyToken, grantAccess([1, 2]), async (req, res) => {
   if (!user) {
     return res.status(202).json({ message: `Record not found: ${memberId}` });
   } else {
-    await user
-      .destroy()
-      .then((result) => {
-        return res.status(200).json({
-          message: "Record deleted successfully.",
-          entity: `${JSON.stringify(result)}`,
-        });
-      })
-      .catch((error) => {
-        return res.status(400).json({
-          message: `Unable to delete record! ${error}`,
-        });
+    try {
+      const result = await user.destroy();
+      return res.status(200).json({
+        message: "Record deleted successfully.",
+        entity: `${JSON.stringify(result)}`,
       });
+    } catch (error) {
+      return res.status(400).json({
+        message: `Unable to delete record! ${error}`,
+      });
+    }
   }
 });
 

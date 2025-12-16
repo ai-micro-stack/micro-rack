@@ -71,7 +71,7 @@ function RackPlanner() {
       if (nicTrees.length > nicTreeId) {
         const activeSubnets = getActiveSubnets(nicTrees, nicTreeId);
         setSubnets(activeSubnets.Subnets);
-        setSubnetId(curContext.subnetId);
+        setSubnetId(activeSubnets.subnetId);
       } else setNicTreeId(0);
     },
     // eslint-disable-next-line
@@ -84,7 +84,7 @@ function RackPlanner() {
         const activePxes = getActivePxes(nicTrees, nicTreeId, subnetId);
         setCurSubnet(subnets[subnetId]);
         setPxes(activePxes.Pxes);
-        setPxeId(null); // activePxes.pxeId
+        setPxeId(activePxes.pxeId);
       } else setSubnetId(0);
     },
     // eslint-disable-next-line
@@ -270,7 +270,7 @@ function RackPlanner() {
                   plaintext
                   readOnly
                   className="square border border-2"
-                  defaultValue={curSubnet.mac}
+                  value={curSubnet.mac}
                   // defaultValue={subnets[subnetId].address}
                 />
               </Form.Group>
@@ -280,7 +280,7 @@ function RackPlanner() {
                   plaintext
                   readOnly
                   className="square border border-2"
-                  defaultValue={curSubnet.cidr}
+                  value={curSubnet.cidr}
                   // defaultValue={subnets[subnetId].address}
                 />
               </Form.Group>
@@ -297,7 +297,7 @@ function RackPlanner() {
                 <Form.Label>Net Address:</Form.Label>
                 <Form.Control
                   type="input"
-                  defaultValue={curSubnet.ip4_netaddress}
+                  value={curSubnet.ip4_netaddress}
                   onChange={(e) => {
                     setCurSubnet({
                       ...curSubnet,
@@ -311,7 +311,7 @@ function RackPlanner() {
                 <Form.Label>Net Mask:</Form.Label>
                 <Form.Control
                   type="input"
-                  defaultValue={curSubnet.netmask}
+                  value={curSubnet.netmask}
                   onChange={(e) => {
                     setCurSubnet({
                       ...curSubnet,
@@ -327,7 +327,7 @@ function RackPlanner() {
                 <Form.Label>IP Pool Begin:</Form.Label>
                 <Form.Control
                   type="input"
-                  defaultValue={curSubnet.ip4_begin}
+                  value={curSubnet.ip4_begin}
                   onChange={(e) => {
                     setCurSubnet({
                       ...curSubnet,
@@ -341,7 +341,7 @@ function RackPlanner() {
                 <Form.Label>IP Pool End:</Form.Label>
                 <Form.Control
                   type="input"
-                  defaultValue={curSubnet.ip4_end}
+                  value={curSubnet.ip4_end}
                   onChange={(e) => {
                     setCurSubnet({
                       ...curSubnet,
@@ -357,7 +357,7 @@ function RackPlanner() {
                 <Form.Label>Router/Gateway Address:</Form.Label>
                 <Form.Control
                   type="input"
-                  defaultValue={curSubnet.ip4_router}
+                  value={curSubnet.ip4_router}
                   onChange={(e) => {
                     setCurSubnet({
                       ...curSubnet,
@@ -371,7 +371,7 @@ function RackPlanner() {
                 <Form.Label>Local DNS Server:</Form.Label>
                 <Form.Control
                   type="input"
-                  defaultValue={curSubnet.ip4_dnslist}
+                  value={curSubnet.ip4_dnslist}
                   onChange={(e) => {
                     setCurSubnet({
                       ...curSubnet,
@@ -385,7 +385,7 @@ function RackPlanner() {
                 <Form.Label>Local Domain Name:</Form.Label>
                 <Form.Control
                   type="input"
-                  defaultValue={curSubnet.ip4_dnsdomain}
+                  value={curSubnet.ip4_dnsdomain}
                   onChange={(e) => {
                     setCurSubnet({
                       ...curSubnet,
